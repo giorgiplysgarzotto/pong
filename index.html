@@ -28,15 +28,15 @@ Double
 </div>
 
 <div class="control-row">
-<span>Theme</span>
-<label>
-<input type="radio" name="theme" value="dark" checked />
-Dark
-</label>
-<label>
-<input type="radio" name="theme" value="light" />
-Light
-</label>
+<label for="theme-select-start">Theme</label>
+<select id="theme-select-start" class="theme-select">
+<option value="coral">Coral</option>
+<option value="twilight">Twilight</option>
+<option value="dawn">Dawn</option>
+<option value="dark" selected>Dark</option>
+<option value="light">Light</option>
+<option value="rainbow">Rainbow</option>
+</select>
 </div>
 
 <div
@@ -71,6 +71,18 @@ value="1"
 
 <button id="start-button">Start</button>
 </div>
+</div>
+
+<div id="game-top-bar" class="hidden">
+<label for="theme-select-ingame" class="sr-only">Theme</label>
+<select id="theme-select-ingame" class="theme-select">
+<option value="coral">Coral</option>
+<option value="twilight">Twilight</option>
+<option value="dawn">Dawn</option>
+<option value="dark" selected>Dark</option>
+<option value="light">Light</option>
+<option value="rainbow">Rainbow</option>
+</select>
 </div>
 
 <div id="controls-bar" class="hidden">

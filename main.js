@@ -6,7 +6,9 @@ const startButton = document.getElementById("start-button");
 const ballSpeedInput = document.getElementById("ball-speed");
 const ballSpeedValue = document.getElementById("ball-speed-value");
 const modeInputs = document.querySelectorAll('input[name="mode"]');
-const themeInputs = document.querySelectorAll('input[name="theme"]');
+const themeSelectStart = document.getElementById("theme-select-start");
+const themeSelectInGame = document.getElementById("theme-select-ingame");
+const gameTopBar = document.getElementById("game-top-bar");
 const playerNamesRow = document.getElementById("player-names-row");
 const playerLeftNameInput = document.getElementById("player-left-name");
 const playerRightNameInput = document.getElementById("player-right-name");
@@ -31,8 +33,9 @@ return selected ? selected.value : "single";
 };
 
 const getSelectedTheme = () => {
-const selected = Array.from(themeInputs).find((input) => input.checked);
-return selected ? selected.value : "dark";
+if (game && themeSelectInGame) return themeSelectInGame.value;
+if (themeSelectStart) return themeSelectStart.value;
+return "dark";
 };
 
 const applyThemeToBody = () => {
@@ -50,9 +53,15 @@ modeInputs.forEach((input) => {
 input.addEventListener("change", updateNameRowVisibility);
 });
 
-themeInputs.forEach((input) => {
-input.addEventListener("change", applyThemeToBody);
+if (themeSelectStart) {
+themeSelectStart.addEventListener("change", () => applyThemeToBody());
+}
+if (themeSelectInGame) {
+themeSelectInGame.addEventListener("change", () => {
+applyThemeToBody();
+if (game) game.setTheme(themeSelectInGame.value);
 });
+}
 
 // Initial UI state
 updateNameRowVisibility();
@@ -133,12 +142,14 @@ li.classList.add("highlight");
 highscoreList.appendChild(li);
 });
 
+if (gameTopBar) gameTopBar.classList.add("hidden");
 highscoreScreen.classList.remove("hidden");
 };
 
 const backToStartScreen = () => {
 highscoreScreen.classList.add("hidden");
 startScreen.classList.remove("hidden");
+if (gameTopBar) gameTopBar.classList.add("hidden");
 controlsBar.classList.add("hidden");
 setControlsState("stopped");
 game = null;
@@ -147,7 +158,9 @@ game = null;
 startButton.addEventListener("click", () => {
 applyThemeToBody();
 
-const theme = getSelectedTheme();
+const theme = themeSelectStart ? themeSelectStart.value : "dark";
+if (themeSelectInGame) themeSelectInGame.value = theme;
+
 const mode = getSelectedMode();
 
 let leftName = "Left";
@@ -169,6 +182,7 @@ game.setModeAndNames(mode, leftName, rightName);
 game.setBallSpeedMultiplier(multiplier);
 
 startScreen.classList.add("hidden");
+if (gameTopBar) gameTopBar.classList.remove("hidden");
 controlsBar.classList.remove("hidden");
 setControlsState("playing");
 game.start();

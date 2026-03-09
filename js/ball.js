@@ -57,11 +57,13 @@ this.vy *= -1;
 // Collide with paddles
 for (const paddle of paddles) {
 if (this._collidesWithPaddle(paddle)) {
-// Move ball out of paddle to avoid sticking
-if (this.x < paddle.x + paddle.width / 2) {
-this.x = paddle.x - paddle.width / 2 - this.radius;
+// Move ball out of paddle to avoid sticking — always place on the side
+// the ball should be moving away from (prevents "flying behind" the paddle)
+const isLeftPaddle = paddle.x < width / 2;
+if (isLeftPaddle) {
+this.x = paddle.x + paddle.width + this.radius;
 } else {
-this.x = paddle.x + paddle.width / 2 + this.radius;
+this.x = paddle.x - this.radius;
 }
 
 this.vx *= -1;
